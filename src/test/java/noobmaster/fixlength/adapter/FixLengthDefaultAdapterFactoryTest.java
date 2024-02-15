@@ -1,5 +1,6 @@
 package noobmaster.fixlength.adapter;
 
+import noobmaster.fixlength.Align;
 import noobmaster.fixlength.exception.FixLengthException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -56,7 +57,8 @@ class FixLengthDefaultAdapterFactoryTest {
                 Arguments.of(getField("sqlTimestampField"), DefaultSqlTimestampAdapter.class),
                 Arguments.of(getField("localDateField"), DefaultLocalDateAdapter.class),
                 Arguments.of(getField("localTimeField"), DefaultLocalTimeAdapter.class),
-                Arguments.of(getField("localDateTimeField"), DefaultLocalDateTimeAdapter.class)
+                Arguments.of(getField("localDateTimeField"), DefaultLocalDateTimeAdapter.class),
+                Arguments.of(getField("enumField"), DefaultEnumAdapter.class)
         );
     }
 
@@ -92,6 +94,7 @@ class FixLengthDefaultAdapterFactoryTest {
         private LocalDate localDateField;
         private LocalTime localTimeField;
         private LocalDateTime localDateTimeField;
+        private Align enumField;
         private List<String> listField;
     }
 }

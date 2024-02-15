@@ -53,6 +53,8 @@
   - java.time.LocalDateTime
 - Logical
   - java.lang.Boolean
+- Enumeration
+  - Any java enum type
 
 ### Example
 
@@ -67,8 +69,15 @@ class Employee {
     @FixLength(position = 3, length = 8)
     @FixLengthDateFormat(pattern = "yyyyMMdd", locale = "en_US")
     private LocalDate dateOfBirth;
+
+    @FixLength(position = 4, length = 1)
+    private GENDER gender;
     
     // ...
+}
+
+enum GENDER {
+    M, F
 }
 
 class Test {
@@ -79,17 +88,18 @@ class Test {
         employee.setName("Noob Master");
         employee.setWorkExperience(9);
         employee.setDateOfBirth(LocalDate.of(1900, 1, 31));
+        employee.setGender(GENDER.M);
 
         String fixedLengthString = mapper.format(employee);
         System.out.println(fixedLengthString);
 
-        Employee asuna = mapper.parse("Yuki Asuna          152007/09/30");
+        Employee asuna = mapper.parse("Yuki Asuna          1520070930F");
         System.out.println(asuna);
     }
 }
 ```
 The Result is:
 ```
-Noob Master         0919000131
-Employee{name='Yuki Asuna', workExperience=15, dateOfBirth=2007-09-30}
+Noob Master         0919000131M
+Employee{name='Yuki Asuna', workExperience=15, dateOfBirth=2007-09-30, gender=F}
 ```

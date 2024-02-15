@@ -17,6 +17,7 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * A factory class to create {@link FixLengthAdapter} from {@link Field}.
@@ -56,7 +57,7 @@ final class FixLengthDefaultAdapterFactory {
     /**
      * All adapters for support classes.
      */
-    private final Map<Class<?>, FixLengthDefaultAdapterConsumer> adapters;
+    private final Map<Class<?>, Function<Field, FixLengthAdapter>> adapters;
 
     /**
      * Create factory object which specified default supported classes.
@@ -115,12 +116,19 @@ final class FixLengthDefaultAdapterFactory {
      * @return given field's adapter
      */
     public FixLengthAdapter createAdapter(Field field) {
-        FixLengthDefaultAdapterConsumer adapterConsumer = this.adapters.get(field.getType());
-        if (Objects.isNull(adapterConsumer)) {
+        Class<?> fieldType = field.getType();
+        Function<Field, FixLengthAdapter> adapter;
+        if (fieldType.isEnum()) {
+            adapter = f -> new DefaultEnumAdapter((Class<? extends Enum>)f.getType());
+        }
+        else {
+            adapter = this.adapters.get(fieldType);
+        }
+        if (Objects.isNull(adapter)) {
             throw new FixLengthException("Field type '%s' does not support by default.".formatted(field.getType().getName()));
         }
         else {
-            return adapterConsumer.accept(field);
+            return adapter.apply(field);
         }
     }
 }
